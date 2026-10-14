@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "wattcycle",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "news": {
+      "2.0.1": {
+        "en": "Restored the supported platforms (Linux and macOS) in package.json\nAdded dependabot updates for the GUI parts",
+        "de": "Unterstützte Systeme (Linux und macOS) in package.json wiederhergestellt\nDependabot Updates für die GUI hinzugefügt",
+        "ru": "Восстановлены поддерживаемые платформы (Linux и macOS) в package.json\nДобавлены обновления dependabot для частей графического интерфейса",
+        "pt": "Restaurou as plataformas suportadas (Linux e macOS) em package.json\nAtualizou o Dependabot nas partes da GUI",
+        "nl": "De ondersteunde platforms (Linux en MacOS) hersteld in package.json\nDependabot-updates toegevoegd voor de GUI-onderdelen",
+        "fr": "Les plateformes supportées (Linux et macOS) ont été restaurées dans package.json\nAjout de mises à jour de l'interface graphique",
+        "it": "Ripristina le piattaforme supportate (Linux e macOS) in package.json\nAggiunti aggiornamenti per le parti GUI",
+        "es": "Restauró las plataformas compatibles (Linux y macOS) en package.json\nSe ha añadido el dependabot a las partes de la GUI",
+        "pl": "Przywrócono obsługiwane platformy (Linux i macOS) w package.json\nDodano aktualizacje zależnych dla części GUI",
+        "uk": "Відновлено підтримувані платформи (Linux і macOS) в package.json\nДодано залежні оновлення для частин графічного інтерфейсу",
+        "zh-cn": "在 package.json 中恢复了支持的平台（Linux 和 macOS）\n为 GUI 部分添加了 dependabot 更新"
+      },
       "2.0.0": {
         "en": "Added device manager support\nAdded a battery tile for the devices app\nAdded a battery widget for vis-2\nAdapter requires node.js >= 22 now.\nImproved total calculations\nUpdated packages\nFixed the build (tsconfig for node 22), so 1.0.0 was never published\nThe adapter does not run in compact mode anymore: the BLE stack of noble keeps its state per process",
         "de": "Gerätemanager-Support hinzugefügt\nAkku-Kachel für die Geräte-App hinzugefügt\nAkku-Widget für VIS-2 hinzugefügt\nAdapter benötigt jetzt node.js >= 22.\nBessere Gesamtberechnung\nNeue Pakete\nBuild behoben (tsconfig für Node 22), 1.0.0 wurde nie veröffentlicht\nDer Adapter läuft nicht mehr kompakt: Der BLE-Stack von Noble behält seinen Status pro Prozess",

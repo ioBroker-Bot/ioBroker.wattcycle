@@ -14,6 +14,7 @@ const READ_BD_ADDR_OGF = 0x04;
 const READ_BD_ADDR_OCF = 0x0009;
 const READ_LOCAL_NAME_OGF = 0x03;
 const READ_LOCAL_NAME_OCF = 0x0014;
+// @repochecker: optional dependency '@stoprocent/bluetooth-hci-socket'
 function loadHciSocket() {
     try {
         const mod = require('@stoprocent/bluetooth-hci-socket');

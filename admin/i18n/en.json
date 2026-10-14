@@ -2,7 +2,7 @@
     "Main settings": "Main settings",
     "Batteries": "Batteries",
     "Bluetooth adapter": "Bluetooth adapter",
-    "Pick the HCI adapter. Restart adapter after change.": "Pick the HCI adapter. Restart adapter after change.",
+    "Selects the Bluetooth controller by MAC address (BD_ADDR). MAC is stable across reboots, hciX numbering is not.": "Selects the Bluetooth controller by MAC address (BD_ADDR). MAC is stable across reboots, hciX numbering is not.",
     "Polling interval (ms)": "Polling interval (ms)",
     "Interval between full poll cycles, in milliseconds.": "Interval between full poll cycles, in milliseconds.",
     "Gap between batteries (ms)": "Gap between batteries (ms)",
@@ -12,7 +12,7 @@
     "Name prefixes": "Name prefixes",
     "Comma-separated list of advertising-name prefixes (case-insensitive). Leave empty to show all devices in the scan.": "Comma-separated list of advertising-name prefixes (case-insensitive). Leave empty to show all devices in the scan.",
     "Scan for BLE devices": "Scan for BLE devices",
-    "Runs a BLE scan via the configured HCI adapter and lists nearby devices. Copy a MAC into the table below.": "Runs a BLE scan via the configured HCI adapter and lists nearby devices. Copy a MAC into the table below.",
+    "Runs a BLE scan via the configured HCI adapter and lists nearby devices": "Runs a BLE scan via the configured HCI adapter and lists nearby devices",
     "Discovered devices": "Discovered devices",
     "Configured batteries": "Configured batteries",
     "Enabled": "Enabled",
@@ -20,5 +20,6 @@
     "Name": "Name",
     "MAC address": "MAC address",
     "MAC": "MAC",
-    "RSSI": "RSSI"
+    "RSSI": "RSSI",
+    "Device manager": "Device manager"
 }

@@ -16,6 +16,8 @@ export default [
         ignores: [
             'src-admin/**/*',
             'src-widgets/**/*',
+            'src-devices/**/*',
+            'src-shared/**/*',
             'admin/**/*',
             'widgets/**/*',
             'node_modules/**/*',

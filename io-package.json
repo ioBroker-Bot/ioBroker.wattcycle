@@ -3,19 +3,6 @@
     "name": "wattcycle",
     "version": "1.0.0",
     "news": {
-      "1.0.0": {
-        "en": "Improved total calculations\nUpdated packages",
-        "de": "Verbesserte Gesamtberechnungen\nAktualisierte Pakete",
-        "ru": "Улучшены суммарные расчеты\nОбновлены пакеты",
-        "pt": "Cálculos totais aprimorados\nPacotes atualizados",
-        "nl": "Verbeterde totaalberekeningen\nBijgewerkte pakketten",
-        "fr": "Calculs totaux améliorés\nPaquets mis à jour",
-        "it": "Calcoli totali migliorati\nPacchetti aggiornati",
-        "es": "Cálculos totales mejorados\nPaquetes actualizados",
-        "pl": "Ulepszone obliczenia całkowite\nZaktualizowane pakiety",
-        "uk": "Покращені розрахунки загальної суми\nОновлені пакети",
-        "zh-cn": "改进的总计算\n更新包"
-      },
       "0.2.2": {
         "en": "Managed timeouts and power off",
         "de": "Managed Timeouts und power off",
@@ -109,8 +96,11 @@
     "adminUI": {
       "config": "json"
     },
-    "compact": true,
+    "compact": false,
     "messagebox": true,
+    "supportedMessages": {
+      "deviceManager": true
+    },
     "tier": 3,
     "dependencies": [
       {
@@ -119,7 +109,7 @@
     ],
     "globalDependencies": [
       {
-        "admin": ">=7.6.20"
+        "admin": ">=7.8.23"
       }
     ],
     "osDependencies": {
@@ -129,7 +119,46 @@
       ]
     },
     "connectionType": "local",
-    "dataSource": "poll"
+    "dataSource": "poll",
+    "deviceWidgets": {
+      "components": [
+        {
+          "name": "WattCycleBatteryComponent",
+          "label": "WattCycle battery",
+          "description": {
+            "en": "State of charge, charge state, voltage, current, power, health and cells of a WattCycle battery",
+            "de": "Ladezustand, Lade-/Entladestatus, Spannung, Strom, Leistung, Zustand und Zellen einer WattCycle-Batterie",
+            "ru": "Уровень заряда, режим, напряжение, ток, мощность, состояние и ячейки батареи WattCycle",
+            "pt": "Estado de carga, modo, tensão, corrente, potência, saúde e células de uma bateria WattCycle",
+            "nl": "Laadtoestand, laadmodus, spanning, stroom, vermogen, conditie en cellen van een WattCycle-batterij",
+            "fr": "État de charge, mode, tension, courant, puissance, santé et cellules d'une batterie WattCycle",
+            "it": "Stato di carica, modalità, tensione, corrente, potenza, salute e celle di una batteria WattCycle",
+            "es": "Estado de carga, modo, tensión, corriente, potencia, salud y celdas de una batería WattCycle",
+            "pl": "Stan naładowania, tryb, napięcie, prąd, moc, kondycja i ogniwa akumulatora WattCycle",
+            "uk": "Рівень заряду, режим, напруга, струм, потужність, стан і комірки батареї WattCycle",
+            "zh-cn": "WattCycle 电池的荷电状态、充放电状态、电压、电流、功率、健康度和电芯"
+          },
+          "icon": "wattcycle.png"
+        }
+      ]
+    },
+    "visWidgets": {
+      "vis2WattCycleWidgets": {
+        "i18n": "component",
+        "name": "vis2WattCycleWidgets",
+        "url": "wattcycle/customWidgets.js",
+        "bundlerType": "module",
+        "color": "#4fc3a1",
+        "label": "wattcycle_set_label",
+        "components": [
+          "WattCycleBattery"
+        ]
+      }
+    },
+    "restartAdapters": [
+      "devices",
+      "vis-2"
+    ]
   },
   "native": {
     "hciDevice": 0,

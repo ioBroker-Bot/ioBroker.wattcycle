@@ -1,0 +1,1 @@
+import{n as e,t}from"./translations-BQxFauRn.js";var n={...e,prefix:t};export{n as default};

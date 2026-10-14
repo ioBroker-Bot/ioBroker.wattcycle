@@ -2,7 +2,7 @@
     "Main settings": "Основні налаштування",
     "Batteries": "Батареї",
     "Bluetooth adapter": "Bluetooth-адаптер",
-    "Pick the HCI adapter. Restart adapter after change.": "Виберіть HCI-адаптер. Після зміни перезапустіть адаптер.",
+    "Selects the Bluetooth controller by MAC address (BD_ADDR). MAC is stable across reboots, hciX numbering is not.": "Вибирає Bluetooth-контролер за MAC-адресою (BD_ADDR). MAC не змінюється після перезавантаження, нумерація hciX — змінюється.",
     "Polling interval (ms)": "Інтервал опитування (мс)",
     "Interval between full poll cycles, in milliseconds.": "Інтервал між повними циклами опитування, у мілісекундах.",
     "Gap between batteries (ms)": "Пауза між батареями (мс)",
@@ -12,7 +12,7 @@
     "Name prefixes": "Префікси імені",
     "Comma-separated list of advertising-name prefixes (case-insensitive). Leave empty to show all devices in the scan.": "Список префіксів імені через кому (регістр не важливий). Залиште порожнім, щоб показати всі пристрої в скануванні.",
     "Scan for BLE devices": "Сканувати BLE-пристрої",
-    "Runs a BLE scan via the configured HCI adapter and lists nearby devices. Copy a MAC into the table below.": "Запускає BLE-сканування через налаштований HCI-адаптер і перераховує пристрої поруч. Скопіюйте MAC до таблиці нижче.",
+    "Runs a BLE scan via the configured HCI adapter and lists nearby devices": "Запускає BLE-сканування через налаштований HCI-адаптер і показує пристрої поблизу",
     "Discovered devices": "Знайдені пристрої",
     "Configured batteries": "Налаштовані батареї",
     "Enabled": "Активно",
@@ -20,5 +20,6 @@
     "Name": "Ім'я",
     "MAC address": "MAC-адреса",
     "MAC": "MAC",
-    "RSSI": "RSSI"
+    "RSSI": "RSSI",
+    "Device manager": "Менеджер пристроїв"
 }

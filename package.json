@@ -30,34 +30,44 @@
     "url": "https://github.com/ioBroker/ioBroker.wattcycle"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^3.4.1",
-    "@stoprocent/noble": "^2.5.5"
+    "@iobroker/adapter-core": "^3.4.3",
+    "@iobroker/dm-utils": "^3.2.1",
+    "@stoprocent/noble": "^2.8.0"
   },
   "devDependencies": {
     "@alcalzone/esbuild-register": "^2.5.1-1",
     "@alcalzone/release-script": "^5.2.1",
     "@alcalzone/release-script-plugin-iobroker": "^5.2.0",
-    "@alcalzone/release-script-plugin-license": "^5.2.0",
+    "@alcalzone/release-script-plugin-license": "^5.2.2",
     "@iobroker/eslint-config": "^2.3.4",
-    "@iobroker/testing": "^5.2.2",
+    "@iobroker/testing": "^6.3.1",
     "@tsconfig/node22": "^22.0.6",
-    "@types/mocha": "^10.0.10",
-    "@types/node": "^22.20.0",
-    "mocha": "^11.7.5",
+    "@types/node": "^22.20.5",
     "typescript": "~6.0.3"
   },
   "main": "build/main.js",
   "files": [
     "admin/",
     "build/",
+    "widgets/",
     "io-package.json",
     "LICENSE"
   ],
   "scripts": {
     "test": "mocha --exit",
     "lint": "eslint -c eslint.config.mjs",
-    "build": "tsc -p tsconfig.build.json",
-    "update-packages": "npx -y npm-check-updates --upgrade",
+    "build": "npm run build:backend && npm run devices:app && npm run vis:app",
+    "build:backend": "tsc -p tsconfig.build.json",
+    "devices:install": "npm --prefix src-devices install",
+    "devices:build": "npm --prefix src-devices run build && node tasks.js devices",
+    "devices:typecheck": "npm --prefix src-devices run typecheck",
+    "devices:app": "npm run devices:install && npm run devices:typecheck && npm run devices:build",
+    "vis:install": "npm --prefix src-widgets install",
+    "vis:build": "npm --prefix src-widgets run build && node tasks.js vis",
+    "vis:typecheck": "npm --prefix src-widgets run typecheck",
+    "vis:app": "npm run vis:install && npm run vis:typecheck && npm run vis:build",
+    "update-packages": "npx -y npm-check-updates --upgrade && cd src-devices && npx -y npm-check-updates --upgrade && cd ../src-widgets && npx -y npm-check-updates --upgrade",
+    "npm": "npm i && cd src-devices && npm i && cd ../src-widgets && npm i",
     "release": "release-script",
     "test:package": "mocha test/package.test.ts --exit",
     "test:integration": "mocha test/integration.test.ts --exit",

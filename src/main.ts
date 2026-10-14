@@ -9,6 +9,7 @@ import {
     type ScanResult,
 } from './lib/battery';
 import { readHciInfos } from './lib/hci-info';
+import { WattCycleDeviceManagement } from './lib/DeviceManagement';
 
 interface HciAdapterInfo {
     value: number | string;
@@ -390,6 +391,7 @@ class WattcycleAdapter extends Adapter {
     // current poll cycle — their previously known values are kept until they
     // are next read successfully.
     private lastAnalog: Map<string, BatteryAnalog> = new Map();
+    private deviceManagement: WattCycleDeviceManagement | null = null;
 
     public constructor(options: Partial<AdapterOptions> = {}) {
         super({
@@ -403,6 +405,7 @@ class WattcycleAdapter extends Adapter {
 
     private onUnload(cb: () => void): void {
         this.stopping = true;
+        this.deviceManagement = null;
         if (this.pollTimer) {
             clearTimeout(this.pollTimer);
             this.pollTimer = null;
@@ -422,6 +425,10 @@ class WattcycleAdapter extends Adapter {
     }
 
     private async onReady(): Promise<void> {
+        // The device manager only reads the configuration and the states, so it works even while
+        // the Bluetooth controller is not (yet) usable.
+        this.deviceManagement = new WattCycleDeviceManagement(this);
+
         if (process.platform !== 'linux' && process.platform !== 'darwin') {
             this.log.error(
                 `This adapter requires Linux (BlueZ) or macOS. Current platform: ${process.platform}. Stopping.`,
@@ -555,11 +562,7 @@ class WattcycleAdapter extends Adapter {
                     clearTimeout(this.pollTimer);
                     this.pollTimer = null;
                 }
-                if (typeof this.terminate === 'function') {
-                    this.terminate('BLE controller poweredOff', 156);
-                } else {
-                    process.exit(156);
-                }
+                this.terminate('BLE controller poweredOff', 156);
                 return;
             }
             // Single up-front scan, then sequential connect/read for every
@@ -786,9 +789,87 @@ class WattcycleAdapter extends Adapter {
         );
     }
 
-    private getDeviceId(bat: BatteryEntry): string {
+    /** Object ID of a battery device relative to the instance, e.g. `batteries.Watt3` */
+    public getDeviceId(bat: BatteryEntry): string {
         const named = bat.name ? sanitizeId(bat.name) : '';
         return `batteries.${named || `b_${macToId(bat.mac)}`}`;
+    }
+
+    /** Whether the Bluetooth stack is up, so polls and scans can run */
+    public isBleReady(): boolean {
+        return !!this.ble && this.ble.isPoweredOn();
+    }
+
+    /**
+     * Start a poll cycle right now.
+     *
+     * @returns false if a cycle is already running or Bluetooth is not ready
+     */
+    public requestPoll(): boolean {
+        if (this.polling || !this.ble) {
+            return false;
+        }
+        this.schedulePoll(0);
+        return true;
+    }
+
+    /**
+     * Run a BLE scan on the current controller with the configured duration and name filter.
+     *
+     * @returns the found devices that match the name prefixes
+     */
+    public async scanBatteries(): Promise<ScanResult[]> {
+        const ms = parseInt(this.config.scanDurationMs as string, 10) || 8000;
+        return this.runScan(ms, this.currentHci, parsePrefixes(this.config.namePrefixes));
+    }
+
+    /**
+     * Change the list of configured batteries.
+     *
+     * The in-memory configuration is updated at once, so the device manager shows the change on its
+     * next refresh. The instance object is written a moment later: that restarts the adapter, and the
+     * answer to the GUI must leave before.
+     *
+     * @param mutate receives a copy of the current list and returns the new one
+     */
+    public async updateBatteries(mutate: (batteries: BatteryEntry[]) => BatteryEntry[]): Promise<void> {
+        const current = Array.isArray(this.config.batteries) ? this.config.batteries : [];
+        const batteries = mutate(current.map(b => ({ ...b })));
+        this.config.batteries = batteries;
+        const objId = `system.adapter.${this.namespace}`;
+        const obj = await this.getForeignObjectAsync(objId);
+        if (!obj) {
+            throw new Error(`Instance object ${objId} not found`);
+        }
+        obj.native.batteries = batteries;
+        setTimeout(() => {
+            this.setForeignObject(objId, obj, err => err && this.log.error(`Cannot save configuration: ${err}`));
+        }, 500);
+    }
+
+    private async runScan(ms: number, targetHci: number, prefixes: string[]): Promise<ScanResult[]> {
+        if (this.polling) {
+            throw new Error('Adapter is currently polling, please retry in a moment');
+        }
+        if (targetHci !== this.currentHci) {
+            this.log.info(`Switching scan to hci${targetHci} (was hci${this.currentHci})`);
+            await this.setupBle(targetHci);
+        }
+        if (!this.ble) {
+            throw new Error('BLE not initialized');
+        }
+        this.log.info(
+            `Scanning on hci${this.currentHci} for ${ms} ms${prefixes.length ? ` (filter: ${prefixes.join(', ')})` : ''}...`,
+        );
+        const raw: ScanResult[] = await this.ble.scan(ms);
+        const list = raw.filter(d => matchesPrefix(d.localName, prefixes));
+        this.log.info(
+            `Scan finished: ${list.length} matching device(s)${prefixes.length ? ` (out of ${raw.length} total)` : ''}`,
+        );
+        for (const item of list) {
+            this.log.debug(`  ${item.address} — ${item.localName || '<no name>'} (${item.rssi} dBm)`);
+        }
+        return list;
     }
 
     // Repopulate the in-memory analog cache from previously persisted states
@@ -928,7 +1009,8 @@ class WattcycleAdapter extends Adapter {
     }
 
     private async onAdapterMessage(obj: ioBroker.Message): Promise<void> {
-        if (!obj?.command) {
+        // `dm:*` commands are answered by the device manager, which listens on its own
+        if (!obj?.command || obj.command.startsWith('dm:')) {
             return;
         }
         switch (obj.command) {
@@ -962,41 +1044,12 @@ class WattcycleAdapter extends Adapter {
                     typeof msg.namePrefixes === 'string' ? msg.namePrefixes : this.config.namePrefixes,
                 );
 
-                if (this.polling) {
-                    if (obj.callback) {
-                        this.sendTo(
-                            obj.from,
-                            obj.command,
-                            { error: 'Adapter is currently polling, please retry in a moment' },
-                            obj.callback,
-                        );
-                    }
-                    return;
-                }
-
                 try {
-                    if (targetHci !== this.currentHci) {
-                        this.log.info(`Switching scan to hci${targetHci} (was hci${this.currentHci})`);
-                        await this.setupBle(targetHci);
-                    }
-                    if (!this.ble) {
-                        throw new Error('BLE not initialized');
-                    }
-                    this.log.info(
-                        `Scanning on hci${this.currentHci} for ${ms} ms${
-                            prefixes.length ? ` (filter: ${prefixes.join(', ')})` : ''
-                        }...`,
-                    );
-                    const raw: ScanResult[] = await this.ble.scan(ms);
-                    const list = raw.filter(d => matchesPrefix(d.localName, prefixes));
-                    this.log.info(
-                        `Scan finished: ${list.length} matching device(s)${prefixes.length ? ` (out of ${raw.length} total)` : ''}`,
-                    );
+                    const list = await this.runScan(ms, targetHci, prefixes);
                     if (obj.callback) {
                         // Combine the result with current settings
                         const batteries = this.config.batteries;
                         for (const item of list) {
-                            this.log.debug(`  ${item.address} — ${item.localName || '<no name>'} (${item.rssi} dBm)`);
                             if (!batteries.find(it => it.mac === item.address)) {
                                 batteries.push({
                                     name: item.localName,

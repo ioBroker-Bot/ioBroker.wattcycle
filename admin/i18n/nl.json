@@ -2,7 +2,7 @@
     "Main settings": "Hoofdinstellingen",
     "Batteries": "Accu's",
     "Bluetooth adapter": "Bluetooth-adapter",
-    "Pick the HCI adapter. Restart adapter after change.": "Kies de HCI-adapter. Adapter na wijziging herstarten.",
+    "Selects the Bluetooth controller by MAC address (BD_ADDR). MAC is stable across reboots, hciX numbering is not.": "Kiest de Bluetooth-controller op MAC-adres (BD_ADDR). Het MAC-adres blijft gelijk na een herstart, de hciX-nummering niet.",
     "Polling interval (ms)": "Polling-interval (ms)",
     "Interval between full poll cycles, in milliseconds.": "Tijd tussen volledige pollcycli, in milliseconden.",
     "Gap between batteries (ms)": "Pauze tussen accu's (ms)",
@@ -12,7 +12,7 @@
     "Name prefixes": "Naam-voorvoegsels",
     "Comma-separated list of advertising-name prefixes (case-insensitive). Leave empty to show all devices in the scan.": "Door komma's gescheiden lijst van voorvoegsels (hoofdletterongevoelig). Laat leeg om alle apparaten in de scan te tonen.",
     "Scan for BLE devices": "BLE-apparaten zoeken",
-    "Runs a BLE scan via the configured HCI adapter and lists nearby devices. Copy a MAC into the table below.": "Voert een BLE-scan uit via de ingestelde HCI-adapter en toont apparaten in de buurt. Kopieer een MAC naar de onderstaande tabel.",
+    "Runs a BLE scan via the configured HCI adapter and lists nearby devices": "Voert een BLE-scan uit via de ingestelde HCI-adapter en toont apparaten in de buurt",
     "Discovered devices": "Gevonden apparaten",
     "Configured batteries": "Geconfigureerde accu's",
     "Enabled": "Actief",
@@ -20,5 +20,6 @@
     "Name": "Naam",
     "MAC address": "MAC-adres",
     "MAC": "MAC",
-    "RSSI": "RSSI"
+    "RSSI": "RSSI",
+    "Device manager": "Apparaatbeheer"
 }

@@ -113,7 +113,7 @@ sendTo('wattcycle.0', 'scan', { duration: 8000 }, res => console.log(res.devices
    Placeholder for the next version (at the beginning of the line):
    ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.0.0 (2026-10-14)
 * (@GermanBluefox) Added device manager support
 * (@GermanBluefox) Added a battery tile for the devices app
 * (@GermanBluefox) Added a battery widget for vis-2

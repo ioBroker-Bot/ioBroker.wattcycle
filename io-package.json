@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "wattcycle",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "news": {
+      "2.0.0": {
+        "en": "Added device manager support\nAdded a battery tile for the devices app\nAdded a battery widget for vis-2\nAdapter requires node.js >= 22 now.\nImproved total calculations\nUpdated packages\nFixed the build (tsconfig for node 22), so 1.0.0 was never published\nThe adapter does not run in compact mode anymore: the BLE stack of noble keeps its state per process",
+        "de": "Gerätemanager-Support hinzugefügt\nAkku-Kachel für die Geräte-App hinzugefügt\nAkku-Widget für VIS-2 hinzugefügt\nAdapter benötigt jetzt node.js >= 22.\nBessere Gesamtberechnung\nNeue Pakete\nBuild behoben (tsconfig für Node 22), 1.0.0 wurde nie veröffentlicht\nDer Adapter läuft nicht mehr kompakt: Der BLE-Stack von Noble behält seinen Status pro Prozess",
+        "ru": "Добавлена поддержка диспетчера устройств\nДобавлена плитка батареи для приложения устройств\nДобавлен виджет батареи для vis-2\nТеперь для адаптера требуется файл node.js >= 22.\nУсовершенствованные расчеты сумм\nОбновленные пакеты\nИсправлена сборка (tsconfig для узла 22), поэтому версия 1.0.0 так и не была опубликована\nАдаптер больше не работает в компактном режиме: стек BLE noble сохраняет свое состояние для каждого процесса",
+        "pt": "Maior suporte ao Device Manager\nAdicionou um bloco de bateria ao app\nAdição de widget de bateria para vis-2\nO adaptador exige node.js >= 2.\nCálculos totais aprimorados\nPacotes novos\nCorrigido o build (tsconfig no node 22), o 1.0.0 nunca foi publicado\nO adaptador não roda mais no modo compacto: a pilha BLE do Noble mantém seu estado por processo",
+        "nl": "Ondersteuning voor apparaatbeheer toegevoegd\nEen batterijtegel toegevoegd voor de app van het apparaat\nEen batterijwidget toegevoegd voor vis-2\nVoor de adapter is nu node.js >= 22 nodig.\nVerbeterde totaalberekeningen\nBijgewerkte pakketten\nDe build is opgelost (tsconfig voor knooppunt 22), zodat 1.0.0 nooit is gepubliceerd\nDe adapter werkt niet meer in compacte modus: de BLE-stack van Noble behoudt zijn status per proces",
+        "fr": "Ajout du support Device Manager\nAjout d'une pile pour l'app Devices\nAjout d'un widget pile pour Vis-2\nAdapter nécessite node.js >= 22.\nCalculs totaux améliorés\nPackages mis à jour\nLa version (tsconfig pour le nœud 22) a été corrigée. La 1.0.0 n'a jamais été publiée\nL'adaptateur ne fonctionne plus en mode compact : la pile BLE de Noble conserve son état par processus",
+        "it": "Aggiunto supporto Device Manager\nAggiunto un riquadro per l'app Devices\nAggiunto un widget per vis-2\nAdapter richiede node.js >= 2 ora.\nCalcoli totali migliorati\nPacchi nuovi\nRisolto il bug (tsconfig per il nodo 22), la 1.0.0 non fu mai pubblicata\nL'adattatore non è più compatto: lo stack BLE di Noble mantiene lo stato per processo",
+        "es": "Más soporte de gestión de dispositivos\nHa añadido una pila a la aplicación del dispositivo\nAñadió un widget de batería para vis-2\nEl adaptador necesita node.js >= 22 ahora.\nCálculos totales mejorados\nPaquetes nuevos\nSe corrigió la versión (tsconfig para el nodo 22), por lo que 1.0.0 no se publicó\nEl adaptador ya no funciona en modo compacto: la pila BLE de noble mantiene su estado por proceso",
+        "pl": "Dodano obsługę menedżera urządzeń\nDodano kafelek baterii dla aplikacji urządzeń\nDodano widżet baterii dla vis-2\nAdapter wymaga teraz node.js >= 22.\nUlepszone obliczenia całkowite\nZaktualizowane pakiety\nNaprawiono kompilację (tsconfig dla węzła 22), więc 1.0.0 nigdy nie zostało opublikowane\nAdapter nie działa już w trybie kompaktowym: stos BLE szlachetnych zachowuje swój stan na każdy proces",
+        "uk": "Додана підтримка диспетчера пристроїв\nДодана плитка акумулятора для програми пристроїв\nДодано віджет батареї для vis-2\nТепер адаптер вимагає node.js >= 22.\nПокращені сумарні розрахунки\nОновлені пакети\nВиправлено збірку (tsconfig для вузла 22), тому 1.0.0 ніколи не був опублікований\nАдаптер більше не працює в компактному режимі: BLE-стек благородних зберігає свій стан за процес",
+        "zh-cn": "增加了设备管理器支持\n为设备应用程序添加了电池磁贴\n为 vis-2 添加了电池小部件\n适配器现在需要 node.js >= 22。\n改进了总计算\n更新的软件包\n修复了构建（节点 22 的 tsconfig），因此 1.0.0 从未发布过\n适配器不再以紧凑模式运行：noble 的 BLE 堆栈会保持每个进程的状态"
+      },
       "0.2.2": {
         "en": "Managed timeouts and power off",
         "de": "Managed Timeouts und power off",

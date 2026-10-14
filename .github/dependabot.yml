@@ -17,6 +17,24 @@ updates:
         update-types:
           - 'version-update:semver-major'
 
+  - package-ecosystem: 'npm'
+    directories:
+      - '/src-devices'
+      - '/src-widgets'
+    schedule:
+      interval: 'cron'
+      timezone: 'Europe/Berlin'
+      cronjob: '51 1 13 * *'
+    open-pull-requests-limit: 20
+    cooldown:
+      default-days: 7
+    versioning-strategy: 'increase'
+    # GUI parts: no major updates, they usually need code changes
+    ignore:
+      - dependency-name: '*'
+        update-types:
+          - 'version-update:semver-major'
+
   - package-ecosystem: 'github-actions'
     directory: '/'
     schedule:

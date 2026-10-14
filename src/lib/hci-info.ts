@@ -35,6 +35,7 @@ interface HciSocketCtor {
     new (): HciSocketLike;
 }
 
+// @repochecker: optional dependency '@stoprocent/bluetooth-hci-socket'
 function loadHciSocket(): HciSocketCtor | null {
     try {
         const mod = require('@stoprocent/bluetooth-hci-socket') as {

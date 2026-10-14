@@ -25,6 +25,8 @@ export declare class WattCycleDeviceManagement extends DeviceManagement<WattCycl
     private getBatteryInfo;
     private getTotalInfo;
     private stateItem;
+    /** A line on the card: the card is narrow, so it always takes the full width */
+    private cardItem;
     private staticItem;
     private header;
     private readNumber;

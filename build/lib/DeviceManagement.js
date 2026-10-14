@@ -82,7 +82,8 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
         };
     }
     loadDevices(context) {
-        const batteries = this.getBatteries();
+        // Sorted by name (Watt1, Watt2, … Watt10), not in the order they were added
+        const batteries = [...this.getBatteries()].sort((a, b) => (a.name || a.mac).localeCompare(b.name || b.mac, undefined, { numeric: true, sensitivity: 'base' }));
         context.setTotalDevices(batteries.length + (batteries.length ? 1 : 0));
         for (const bat of batteries) {
             context.addDevice(this.getBatteryInfo(bat));
@@ -160,9 +161,9 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
             schema: {
                 type: 'panel',
                 items: {
-                    remaining: this.stateItem(ids.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
-                    cycles: this.stateItem(ids.cycles, (0, i18n_1.t)('Cycles')),
-                    spread: this.stateItem(ids.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
+                    remaining: this.cardItem(ids.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
+                    cycles: this.cardItem(ids.cycles, (0, i18n_1.t)('Cycles')),
+                    spread: this.cardItem(ids.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
                 },
             },
         };
@@ -239,7 +240,6 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
     getTotalInfo() {
         return {
             id: TOTAL_ID,
-            identifier: 'Σ',
             name: (0, i18n_1.t)('Total'),
             icon: ICON_TOTAL,
             group: { key: 'total', name: (0, i18n_1.t)('Total'), icon: ICON_TOTAL },
@@ -250,9 +250,9 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
                 schema: {
                     type: 'panel',
                     items: {
-                        count: this.stateItem('total.count', (0, i18n_1.t)('Reachable batteries')),
-                        remaining: this.stateItem(TOTAL_STATES.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
-                        spread: this.stateItem(TOTAL_STATES.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
+                        count: this.cardItem('total.count', (0, i18n_1.t)('Reachable batteries')),
+                        remaining: this.cardItem(TOTAL_STATES.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
+                        spread: this.cardItem(TOTAL_STATES.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
                     },
                 },
             },
@@ -282,6 +282,10 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
             xs: 12,
             sm: 6,
         };
+    }
+    /** A line on the card: the card is narrow, so it always takes the full width */
+    cardItem(relId, label, unit) {
+        return { ...this.stateItem(relId, label, unit), sm: 12 };
     }
     staticItem(label, data, unit) {
         return {
@@ -324,11 +328,11 @@ class WattCycleDeviceManagement extends dm_utils_1.DeviceManagement {
             mosTemp: this.stateItem(ids.mosTemp, (0, i18n_1.t)('MOSFET temperature'), '°C'),
             pcbTemp: this.stateItem(ids.pcbTemp, (0, i18n_1.t)('PCB temperature'), '°C'),
             _health: this.header((0, i18n_1.t)('Battery health')),
-            remaining: this.stateItem(ids.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
+            remaining: this.cardItem(ids.remainingAh, (0, i18n_1.t)('Remaining capacity'), 'Ah'),
             totalAh: this.stateItem(ids.totalAh, (0, i18n_1.t)('Full capacity'), 'Ah'),
             designAh: this.stateItem(ids.designAh, (0, i18n_1.t)('Design capacity'), 'Ah'),
-            cycles: this.stateItem(ids.cycles, (0, i18n_1.t)('Cycles')),
-            spread: this.stateItem(ids.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
+            cycles: this.cardItem(ids.cycles, (0, i18n_1.t)('Cycles')),
+            spread: this.cardItem(ids.cellSpread, (0, i18n_1.t)('Cell spread'), 'mV'),
         };
         const full = await this.readNumber(ids.totalAh);
         const design = await this.readNumber(ids.designAh);

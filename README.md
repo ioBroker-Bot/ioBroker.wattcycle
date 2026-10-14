@@ -121,7 +121,7 @@ sendTo('wattcycle.0', 'scan', { duration: 8000 }, res => console.log(res.devices
 * (@GermanBluefox) Improved total calculations
 * (@GermanBluefox) Updated packages
 * (@GermanBluefox) Fixed the build (tsconfig for node 22), so 1.0.0 was never published
-* (@GermanBluefox) The adapter does not run in compact mode any more: the BLE stack of noble keeps its state per process
+* (@GermanBluefox) The adapter does not run in compact mode anymore: the BLE stack of noble keeps its state per process
 
 ### 0.2.2 (2026-05-07)
 * (@GermanBluefox) Managed timeouts and power off

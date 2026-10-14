@@ -139,7 +139,10 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
     }
 
     protected override loadDevices(context: DeviceLoadContext<string>): void {
-        const batteries = this.getBatteries();
+        // Sorted by name (Watt1, Watt2, … Watt10), not in the order they were added
+        const batteries = [...this.getBatteries()].sort((a, b) =>
+            (a.name || a.mac).localeCompare(b.name || b.mac, undefined, { numeric: true, sensitivity: 'base' }),
+        );
         context.setTotalDevices(batteries.length + (batteries.length ? 1 : 0));
         for (const bat of batteries) {
             context.addDevice(this.getBatteryInfo(bat));
@@ -221,9 +224,9 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
             schema: {
                 type: 'panel',
                 items: {
-                    remaining: this.stateItem(ids.remainingAh, t('Remaining capacity'), 'Ah'),
-                    cycles: this.stateItem(ids.cycles, t('Cycles')),
-                    spread: this.stateItem(ids.cellSpread, t('Cell spread'), 'mV'),
+                    remaining: this.cardItem(ids.remainingAh, t('Remaining capacity'), 'Ah'),
+                    cycles: this.cardItem(ids.cycles, t('Cycles')),
+                    spread: this.cardItem(ids.cellSpread, t('Cell spread'), 'mV'),
                 },
             },
         };
@@ -310,7 +313,6 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
     private getTotalInfo(): DeviceInfo<string> {
         return {
             id: TOTAL_ID,
-            identifier: 'Σ',
             name: t('Total'),
             icon: ICON_TOTAL,
             group: { key: 'total', name: t('Total'), icon: ICON_TOTAL },
@@ -321,9 +323,9 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
                 schema: {
                     type: 'panel',
                     items: {
-                        count: this.stateItem('total.count', t('Reachable batteries')),
-                        remaining: this.stateItem(TOTAL_STATES.remainingAh, t('Remaining capacity'), 'Ah'),
-                        spread: this.stateItem(TOTAL_STATES.cellSpread, t('Cell spread'), 'mV'),
+                        count: this.cardItem('total.count', t('Reachable batteries')),
+                        remaining: this.cardItem(TOTAL_STATES.remainingAh, t('Remaining capacity'), 'Ah'),
+                        spread: this.cardItem(TOTAL_STATES.cellSpread, t('Cell spread'), 'mV'),
                     },
                 },
             },
@@ -355,6 +357,11 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
             xs: 12,
             sm: 6,
         };
+    }
+
+    /** A line on the card: the card is narrow, so it always takes the full width */
+    private cardItem(relId: string, label: ioBroker.StringOrTranslated, unit?: string): ConfigItemAny {
+        return { ...this.stateItem(relId, label, unit), sm: 12 };
     }
 
     private staticItem(label: ioBroker.StringOrTranslated, data: string | number, unit?: string): ConfigItemAny {
@@ -402,11 +409,11 @@ export class WattCycleDeviceManagement extends DeviceManagement<WattCycleAdapter
             mosTemp: this.stateItem(ids.mosTemp, t('MOSFET temperature'), '°C'),
             pcbTemp: this.stateItem(ids.pcbTemp, t('PCB temperature'), '°C'),
             _health: this.header(t('Battery health')),
-            remaining: this.stateItem(ids.remainingAh, t('Remaining capacity'), 'Ah'),
+            remaining: this.cardItem(ids.remainingAh, t('Remaining capacity'), 'Ah'),
             totalAh: this.stateItem(ids.totalAh, t('Full capacity'), 'Ah'),
             designAh: this.stateItem(ids.designAh, t('Design capacity'), 'Ah'),
-            cycles: this.stateItem(ids.cycles, t('Cycles')),
-            spread: this.stateItem(ids.cellSpread, t('Cell spread'), 'mV'),
+            cycles: this.cardItem(ids.cycles, t('Cycles')),
+            spread: this.cardItem(ids.cellSpread, t('Cell spread'), 'mV'),
         };
         const full = await this.readNumber(ids.totalAh);
         const design = await this.readNumber(ids.designAh);
